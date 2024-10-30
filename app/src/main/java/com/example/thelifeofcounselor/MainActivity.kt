@@ -13,8 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.thelifeofcounselor.ui.screen.MainScreen
+import com.example.thelifeofcounselor.ui.component.BottomNavigationBar
+import com.example.thelifeofcounselor.ui.screen.CounselScreen
+import com.example.thelifeofcounselor.ui.screen.EmployScreen
+import com.example.thelifeofcounselor.ui.screen.HospitalScreen
+import com.example.thelifeofcounselor.ui.screen.RecordScreen
 import com.example.thelifeofcounselor.ui.theme.TheLifeOfCounselorTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,16 +28,21 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val navHostController = rememberNavController()
+            val visibleScreens = setOf(Router.HospitalScreen, Router.EmployScreen, Router.CounselScreen, Router.RecordScreen)
+            val currentRoute = navHostController.currentBackStackEntryAsState().value?.destination?.route
 
             TheLifeOfCounselorTheme {
                 Scaffold(
-                    modifier = Modifier.fillMaxSize()
-                ) { innerPadding ->
-                    Navigation(
-                        navHostController = navHostController,
-                        innerPadding = innerPadding
-                    )
-                }
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        if (currentRoute in visibleScreens) {
+                            BottomNavigationBar(navController = navHostController)
+                        }
+                    },
+                    content = { innerPadding ->
+                        Navigation(navHostController, innerPadding)
+                    }
+                )
             }
         }
     }
@@ -49,8 +59,11 @@ private fun Navigation(
             .padding(innerPadding)
             .navigationBarsPadding(),
         navController = navHostController,
-        startDestination = Router.MainScreen
+        startDestination = Router.HospitalScreen
     ) {
-        composable(Router.MainScreen) { MainScreen(navHostController) }
+        composable(Router.HospitalScreen) { HospitalScreen(navHostController) }
+        composable(Router.EmployScreen) { EmployScreen(navHostController) }
+        composable(Router.CounselScreen) { CounselScreen(navHostController) }
+        composable(Router.RecordScreen) { RecordScreen(navHostController) }
     }
 }
