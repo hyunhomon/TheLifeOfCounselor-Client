@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.thelifeofcounselor_client"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.thelifeofcounselor_client"
@@ -50,6 +50,10 @@ android {
 }
 
 dependencies {
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("androidx.navigation:navigation-compose:2.8.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
